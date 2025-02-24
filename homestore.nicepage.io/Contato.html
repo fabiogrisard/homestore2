@@ -209,13 +209,14 @@ c5.5,0,9.9,4.5,9.9,9.9V73.3z"></path></svg></span>
                   <p class="u-align-left u-text u-text-7"> +55 42 9 8444-1701</p>
                 </div>
               </div>
-         <div class="u-container-align-left u-container-style u-layout-cell u-size-33-lg u-size-37-xl u-size-60-md u-size-60-sm u-size-60-xs u-layout-cell-2" data-animation-name="customAnimationIn" data-animation-duration="1500" data-animation-delay="500">
+    // aqui começa o formulario
+<div class="u-container-align-left u-container-style u-layout-cell u-size-33-lg u-size-37-xl u-size-60-md u-size-60-sm u-size-60-xs u-layout-cell-2" data-animation-name="customAnimationIn" data-animation-duration="1500" data-animation-delay="500">
     <div class="u-container-layout u-valign-middle u-container-layout-2">
         <div class="u-form u-form-1">
             <form action="https://formspree.io/f/mbldeyvy" method="POST" class="u-clearfix u-form-spacing-10 u-form-vertical u-inner-form" source="email" name="form" style="padding: 10px;">
                 <div class="u-form-group u-form-name u-form-partition-factor-2 u-form-group-1">
                     <label for="name-0c64" class="u-label">Nome</label>
-                    <input type="text" placeholder="Digite seu nome" id="name-0c64" name="name-1" class="u-border-2 u-border-grey-40 u-border-no-left u-border-no-right u-border-no-top u-input u-input-rectangle u-input-1" required="">
+                    <input type="text" placeholder="Digite seu nome" id="name-0c64" name="name" class="u-border-2 u-border-grey-40 u-border-no-left u-border-no-right u-border-no-top u-input u-input-rectangle u-input-1" required="">
                 </div>
                 <div class="u-form-group u-form-name u-form-partition-factor-2 u-form-group-2">
                     <label for="city" class="u-label">Cidade</label>
@@ -242,6 +243,55 @@ c5.5,0,9.9,4.5,9.9,9.9V73.3z"></path></svg></span>
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelector('form[action="https://formspree.io/f/mbldeyvy"]').addEventListener('submit', function(event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        var formData = new FormData(this); // Coleta os dados do formulário
+
+        fetch('https://formspree.io/f/mbldeyvy', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Limpa o formulário
+                this.reset();
+                // Exibe a mensagem de sucesso
+                document.querySelector('.u-form-send-success').style.display = 'block';
+                // Oculta a mensagem de erro, caso esteja visível
+                document.querySelector('.u-form-send-error').style.display = 'none';
+            } else {
+                response.json().then(data => {
+                    if (Object.hasOwn(data, 'errors')) {
+                        // Exibe a mensagem de erro com os detalhes
+                        document.querySelector('.u-form-send-error').textContent = data["errors"].map(error => error["message"]).join(", ");
+                    } else {
+                        // Exibe uma mensagem de erro genérica
+                        document.querySelector('.u-form-send-error').textContent = "Ocorreu um erro ao enviar o formulário. Tente novamente.";
+                    }
+                    // Exibe a mensagem de erro
+                    document.querySelector('.u-form-send-error').style.display = 'block';
+                })
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao enviar o formulário:', error);
+            // Exibe a mensagem de erro genérica
+            document.querySelector('.u-form-send-error').textContent = "Ocorreu um erro ao enviar o formulário. Verifique sua conexão com a internet e tente novamente.";
+            // Exibe a mensagem de erro
+            document.querySelector('.u-form-send-error').style.display = 'block';
+        });
+    });
+</script>
+
+
+
+// aqui termina o formulario
     
     
     
